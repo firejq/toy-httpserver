@@ -1,14 +1,11 @@
 package com.firejq;
 
 import com.firejq.config.Config;
-import com.firejq.entity.RequestHeader;
 import com.firejq.util.RequestUtil;
 import com.firejq.util.ResponseUtil;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -51,6 +48,12 @@ public class HttpServer {
 			// 注册 ACCEPT 事件
 			ssChannel.register(selector, SelectionKey.OP_ACCEPT);
 
+			System.out.println(
+					"httpserver start, serving ./\n" +
+							"Available on:\n" +
+							this.ipAddress + ":" + this.port + "\n" +
+							"Hit CTRL-C to stop the server\n");
+
 			while (true) {
 				if (selector.select() <= 0)
 					continue;
@@ -61,20 +64,18 @@ public class HttpServer {
 					SelectionKey sKey = it.next();
 					it.remove();
 
-					if (sKey.isAcceptable()) {
-
+					if (sKey.isValid() && sKey.isAcceptable()) {
 						SocketChannel sChannel = ssChannel.accept();
 						sChannel.configureBlocking(false);
 						sChannel.register(selector, SelectionKey.OP_READ);
 
-					} else if (sKey.isReadable()) {
-
+					} else if (sKey.isValid() && sKey.isReadable()) {
 						RequestUtil.requestHandler(sKey);
 						sKey.interestOps(SelectionKey.OP_WRITE);
 
-					} else if (sKey.isWritable()) {
-
+					} else if (sKey.isValid() && sKey.isWritable()) {
 						ResponseUtil.responseHandler(sKey);
+						sKey.interestOps(SelectionKey.OP_READ);
 
 					}
 				}

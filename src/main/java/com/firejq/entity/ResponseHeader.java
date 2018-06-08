@@ -1,5 +1,7 @@
 package com.firejq.entity;
 
+import com.firejq.config.Config;
+
 /**
  * <p>Title: </p>
  * <p>Description: </p>
@@ -61,12 +63,14 @@ public class ResponseHeader extends Header {
 		sb.append(String.format("%s %d %s\r\n",
 								super.getHttpVersion(), status, msg));
 		//sb.append(String.format("ContentType: %s\r\n", contentType));
-		sb.append(String.format("ContentLength: %d\r\n",
+		sb.append(String.format("Content-Length: %s\r\n",
 								super.getHeaderField()
-									 .getOrDefault("ContentLength", "0")));
-		sb.append(String.format("Server: %s\r\n",
-								super.getHeaderField()
-									 .getOrDefault("Server", "")));
+									 .getOrDefault("Content-Length", "0")));
+		sb.append(String.format(
+				"Server: %s\r\n",
+				super.getHeaderField()
+					 .getOrDefault("Server",
+								   Config.DEFAULT_SERVER_NAME)));
 		sb.append("\r\n");
 		return sb.toString();
 	}

@@ -18,8 +18,8 @@ import java.nio.channels.SocketChannel;
 public class RequestUtil {
 
 	public static void requestHandler(SelectionKey sKey) {
-		try (SocketChannel sChannel = (SocketChannel) sKey.channel()) {
-
+		try {
+			SocketChannel sChannel = (SocketChannel) sKey.channel();
 			ByteBuffer reqBuffer
 					= ByteBuffer.allocate(Config.DEFAULT_BUFFER_SIZE);
 			sChannel.read(reqBuffer);
@@ -38,17 +38,26 @@ public class RequestUtil {
 
 	private static RequestHeader parseReqHeader(String reqHeaderStr) {
 		if (reqHeaderStr.isEmpty()) {
-			// throw new InvalidHeaderException();
+			// throw new InvalidHeaderException(); todo
+			return null;
 		}
+
+		System.out.println("----------request---------");
+		System.out.println(reqHeaderStr);
+		System.out.println("---------------------------");
 
 		// 解析 HTTP 报文首部
 		RequestHeader reqHeader = new RequestHeader();
 		// 解析 HTTP 报文首部的请求行
 		int index = reqHeaderStr.indexOf(HttpConstant.LINE_SEPARATOR);
+		if (index == -1) {
+			return null;
+		}
 		String [] fields = reqHeaderStr.substring(0, index)
 									   .split(" ");
 		if (fields.length != 3) {
-			// throw new InvalidHeaderException();
+			// throw new InvalidHeaderException(); todo
+			return null;
 		}
 		reqHeader.setReqMethod(fields[0]);
 		reqHeader.setReqUri(fields[1]);

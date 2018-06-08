@@ -19,7 +19,7 @@ public abstract class Header {
 	}
 
 	// HTTP 版本
-	private String httpVersion;
+	private String httpVersion = "HTTP/1.1";
 
 	// 首部字段
 	private Map<String, String> headerField = new HashMap<>();

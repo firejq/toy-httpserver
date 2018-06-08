@@ -31,7 +31,7 @@ tasks.withType(Javadoc) {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'com.com.firejq.App'
+        attributes 'Main-Class': 'com.firejq.App'
         attributes 'Class-Path': 'httpserver.jar'
     }
 }

@@ -1,8 +1,5 @@
 package com.firejq.entity;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * <p>Title: </p>
  * <p>Description: </p>
@@ -42,4 +39,5 @@ public class RequestHeader extends Header {
 	public void setReqUri(String reqUri) {
 		this.reqUri = reqUri;
 	}
+
 }
